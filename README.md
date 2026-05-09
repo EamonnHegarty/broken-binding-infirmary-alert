@@ -71,6 +71,30 @@ To run locally, create a `.env` file with your secrets and run:
 npx ts-node src/index.ts
 ```
 
+## Scheduling via cron-job.org
+
+GitHub Actions' built-in cron scheduler is unreliable and can delay runs by 30+ minutes. To fix this, [cron-job.org](https://console.cron-job.org) triggers the workflow on a reliable schedule instead.
+
+The cron job hits GitHub's `workflow_dispatch` API every 15 minutes, which kicks off the workflow immediately and accurately.
+
+**To manage or recreate it:** go to [console.cron-job.org](https://console.cron-job.org) and log in.
+
+Settings used:
+
+| Field | Value |
+| --- | --- |
+| URL | `https://api.github.com/repos/EamonnHegarty/broken-binding-infirmary-alert/actions/workflows/infirmary-check.yml/dispatches` |
+| Method | `POST` |
+| Schedule | Every 15 minutes |
+| Header: `Authorization` | `Bearer <github token with workflow scope>` |
+| Header: `Accept` | `application/vnd.github+json` |
+| Header: `Content-Type` | `application/json` |
+| Body | `{"ref":"main"}` |
+
+The GitHub token needs the **`workflow`** scope (separate from the `gist` token used for state). Generate one at [github.com/settings/tokens](https://github.com/settings/tokens).
+
+cron-job.org is free with no usage limits for this kind of lightweight trigger.
+
 ## Note on inactivity
 
-GitHub automatically pauses scheduled workflows on repos with no activity for 60 days. GitHub will email you when this happens - just re-enable the workflow from the Actions tab.
+GitHub automatically pauses scheduled workflows on repos with no activity for 60 days. GitHub will email you when this happens - just re-enable the workflow from the Actions tab. The cron-job.org trigger will also stop working if the workflow is paused.
