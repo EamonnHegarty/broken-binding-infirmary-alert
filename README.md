@@ -2,7 +2,7 @@
 
 GitHub Actions workflow that monitors [The Broken Binding SE Infirmary](https://thebrokenbindingsub.com/collections/the-infirmary) for new special edition listings and sends an email alert when one appears.
 
-Runs every hour. Uses a private GitHub Gist as a lightweight state store - no database needed.
+Runs every 15 minutes. Uses a private GitHub Gist as a lightweight state store - no database needed.
 
 ## How it works
 
